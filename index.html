@@ -1,206 +1,450 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Contract or Permie?</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="description" content="Calculator for Australians to compare contract rates with the equivalent permanent rates.">
-		<meta name="author" content="Simon Rumble">
+<head>
+    <meta charset="utf-8">
+    <title>Contract or Permanent Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculator for Australians to compare contract rates with the equivalent permanent rates.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-		<!-- Le styles -->
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<style>
-			body {
-				padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-			}
-		</style>
-		<link href="css/bootstrap-responsive.css" rel="stylesheet">
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-		<!--[if lt IE 9]>
-			<script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-		<!-- Fav and touch icons -->
-		<link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/Nuvola_apps_kcalc_144_144.png">
-		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
-		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/Nuvola_apps_kcalc_114_114.png">
-		<link rel="apple-touch-icon-precomposed" href="ico/Nuvola_apps_kcalc_128_128.png">
-		<link rel="shortcut icon" href="ico/favicon.png">
-		<!-- Icon image from David Vignoni under GNU Public License http://www.icon-king.com/projects/nuvola/ -->
-<script type="text/javascript" src="https://cdn.amplitude.com/script/3338dab3f54226cabfd397af2db8b993.experiment.js"></script>
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-NKH9CR8');</script>
-<!-- End Google Tag Manager -->
-		<meta name="google-site-verification" content="FPm2dPKx77pTd0CoT1IxY19bd3XXZ3zbRDXRTtGvr5k" />
-	</head>
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
 
-	<body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NKH9CR8"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-		<div class="navbar navbar-inverse navbar-fixed-top">
-			<div class="navbar-inner">
-				<div class="container">
-					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</a>
-					<a class="brand" href="#">Contract or Permie?</a>
-				</div>
-			</div>
-		</div>
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
 
-		<div class="container">
-			<h1>Compare contract rates with permanent</h1>
-			<div class="hero-unit">
-				
-				<p>This calculator helps you compare "package" or "gross" salaries, daily contract rates and their equivalent standard salary number.</p>
-				<p>Updated for 2024 public holidays (including bank holiday) and the increase of super to 11.5% for financial years 2024-2025. <a href="https://www.ato.gov.au/tax-rates-and-codes/key-superannuation-rates-and-thresholds/super-guarantee">Super percentage is increasing until FY2028</a></p>
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
 
+        .calculator {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
 
-			</div>
-			<div class="row">
-				<form>
-					<div class="span7">
-						<fieldset>
-							<legend>Type in the number you have</legend>
-							<label><b>Standard annual salary</b></label>
-							<input type="text" placeholder="70000" id="annualex" rel="tooltip" title="What most people talk about as their annual salary, ex super and ex tax" />
-							<label>"Package" annual salary</label>
-							<input type="text" placeholder="78050" id="annualinc" rel="tooltip" title="What the recruiter will quote you as 'package', inc super ex tax" />
-							<label>Daily contract rate (inc superannuation, ex GST)</label>
-							<input type="text" placeholder="347.00" id="dailyinc" rel="toolip" title="Daily rate net of the standard days off in 'Assumptions'" />
-						</fieldset>
-					</div>
-					<div class="span5">
-						<fieldset>
-							<legend>Assumptions</legend>
-							<label>Days worked per week</label>
-							<input type="text" value="5" id="daysperweek" rel="tooltip" title="Change for part-timers">
-							<label>Weekdays in year</label>
-							<input type="text" value="261" id="weekdays" rel="tooltip" title="52 times days worked per week, so not 100% accurate">
-							<label>Public holidays</label>
-							<input type="text" value="10" id="pubhols" rel="tooltip" title="Based on NSW weekday public holidays for 2014">
-							<label>Annual leave</label>
-							<input type="text" value="20" id="annualleave" rel="tooltip" title="Four weeks' holidays if you work five days a week">
-							<label>Sick leave</label>
-							<input type="text" value="5" id="sickleave" rel="tooltip" title="Don't get sick more than a week">
-							<label>Super percentage</label>
-							<input type="text" value="11.5" id="superannuation">
-							<label><b>Net days worked</b></label>
-							<input type="text" value="225" id="daysworked">
-						</fieldset>
-					</div>
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
 
-				</form>
-			</div>
-			<div class="row">
-				<p>Most people in Australia quote their salary excluding tax and superannuation. Recruiters and employers like to quote it inclusive of superannuation because it sounds higher. When you're looking at contract daily rates, it's standard to include super.This calculator helps you compare "package" and "gross" salaries, and daily contract rates, with their equivalent standard salary number.</p>
-				<p>I like to always compare anything that's being offered with a "standard" salary number. With contracts, you tend to get paid more because leave, public holidays and sick leave aren't covered. This calculator accounts for that.</p>
-			</div>
+        .input-section, .assumptions-section {
+            padding: 40px;
+        }
 
-		</div> <!-- /container -->
+        .input-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
 
-		<!-- Le javascript
-		================================================== -->
-		<!-- Placed at the end of the document so the pages load faster -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-		<script src="js/bootstrap.js"></script>
-		<script type="text/javascript">
-			function format(input) {
-				return new Intl.NumberFormat('en-AU', {style: 'currency', currency: 'AUD', maximumSignificantDigits: 3}).format(input); 
-			}
+        .assumptions-section {
+            background: #f8f9fa;
+        }
 
-			function unformat(input) {
-				input = input.replace('$', '');
-				input = input.replace(/\,/g, '');
-				return parseInt(input);
-			}
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: white;
+        }
 
+        .assumptions-section .section-title {
+            color: #333;
+        }
 
-			$('input').change(function() {
-				// Record the actually-entered field value before we format it down lower
-				fieldValue = this.value;
+        .form-group {
+            margin-bottom: 25px;
+        }
 
-				superannuation = 1.0 + $('#superannuation').val() / 100;
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
 
-				// Unformat before we do calculations
-				$('#annualex,#annualinc,#dailyinc').each(function() {
-					this.value = unformat(this.value);
-				});
+        .input-section .form-label {
+            color: rgba(255,255,255,0.9);
+        }
 
-				switch(this.id) {
-					case 'annualex':
-						$('#annualinc').val($('#annualex').val() * superannuation);
-						$('#dailyinc').val($('#annualinc').val() / $('#daysworked').val());
-						break;
+        .assumptions-section .form-label {
+            color: #555;
+        }
 
-					case 'annualinc':
-						$('#annualex').val($('#annualinc').val() * (1 / superannuation));
-						$('#dailyinc').val($('#annualinc').val() / $('#daysworked').val());
-						break;
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.95);
+            color: #333;
+        }
 
-					case 'dailyinc':
-						$('#annualinc').val($('#dailyinc').val() * $('#daysworked').val());
-						$('#annualex').val($('#annualinc').val() * (1/superannuation));
-						break;
+        .form-input:focus {
+            outline: none;
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
 
-					default:
-					// One of the assumptions changed
-					$('#weekdays').val($('#daysperweek').val() * 52);
+        .form-input.highlighted {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+        }
 
-					// Calculate annual leave pro rata from 20, but no more than 20
-					if ($('#daysperweek').val() > 5) {
-						alert("You're really gonna work more than 5 days every week? That sucks!");
-						$('#annualleave').val(20);
-					} else {
-						$('#annualleave').val(Math.round(($('#daysperweek').val()/5)*20));
-					}
+        .primary-input {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
 
-					$('#daysworked').val(
-						$('#weekdays').val() - $('#pubhols').val() - $('#annualleave').val() - $('#sickleave').val()
-						// If they've already done a calculation in the top bit, recalculate
-					);
-					if ($('#annualex').val() !== '') {
-						$('#annualinc').val($('#dailyinc').val() * $('#daysworked').val());
-						$('#annualex').val($('#annualinc').val() * (1 / superannuation));
-					}
-				}
-				if ($('#annualex').val() !== '') {
-					$('#annualex,#annualinc,#dailyinc').each(function() {
-						this.value = format((this.value * 1).toFixed(0));
-					});
-				}
-				dataLayer.push({
-					'event': 'change',
-					'fieldChanged': this.id,
-					'fieldValue': fieldValue,
+        .primary-input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
 
-					'annualex_unformatted': unformat($('#annualex').val()),
-					'annualinc_unformatted': unformat($('#annualinc').val()),
-					'dailyinc_unformatted': unformat($('#dailyinc').val()),
-					'annualex_formatted': $('#annualex').val(),
-					'annualinc_formatted': $('#annualinc').val(),
-					'dailyinc_formatted': $('#dailyinc').val(),
-					'daysperweek': ($('#daysperweek').val()) * 1,
-					'weekdays': ($('#weekdays').val() * 1),
-					'pubhols': ($('#pubhols').val() * 1),
-					'sickleave': ($('#sickleave').val() * 1),
-					'superannuation': ($('#superannuation').val() * 1),
-					'daysworked': ($('#daysworked').val() * 1)
+        .primary-input:focus {
+            background: rgba(255,255,255,0.3);
+            color: white;
+        }
 
-				})
+        .info-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
 
-			});
-		// Add the tooltips to the input fields
-		$('input').tooltip({'placement' : 'right'})
-		</script>
-	</body>
+        .info-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .info-section p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .calculated-value {
+            font-weight: 600;
+            color: #2563eb;
+        }
+
+        .assumption-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .assumption-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .input-section, .assumptions-section {
+                padding: 30px 25px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .update-note {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            z-index: 1000;
+            opacity: 0;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Contract vs Permanent Calculator</h1>
+            <p>Compare contract rates with permanent salaries in Australia</p>
+        </div>
+
+        <div class="update-note">
+            <p><strong>Updated for 2024-2025:</strong> Using 11.5% superannuation rate and current public holidays</p>
+        </div>
+
+        <div class="calculator">
+            <div class="calculator-grid">
+                <div class="input-section">
+                    <h2 class="section-title">Enter Your Numbers</h2>
+                    
+                    <div class="form-group">
+                        <label class="form-label tooltip" data-tooltip="What most people talk about as their annual salary, excluding super and tax">
+                            <strong>Standard Annual Salary</strong>
+                        </label>
+                        <input type="text" class="form-input primary-input" placeholder="$70,000" id="annualex">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label tooltip" data-tooltip="What recruiters quote as 'package' - includes superannuation, excludes tax">
+                            Package Annual Salary
+                        </label>
+                        <input type="text" class="form-input primary-input" placeholder="$78,050" id="annualinc">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label tooltip" data-tooltip="Daily rate including superannuation, excluding GST">
+                            Daily Contract Rate
+                        </label>
+                        <input type="text" class="form-input primary-input" placeholder="$347" id="dailyinc">
+                    </div>
+                </div>
+
+                <div class="assumptions-section">
+                    <h2 class="section-title">Assumptions</h2>
+                    
+                    <div class="assumption-grid">
+                        <div class="form-group">
+                            <label class="form-label">Days per week</label>
+                            <input type="text" class="form-input" value="5" id="daysperweek">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Weekdays in year</label>
+                            <input type="text" class="form-input" value="261" id="weekdays">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Public holidays</label>
+                            <input type="text" class="form-input" value="10" id="pubhols">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Annual leave</label>
+                            <input type="text" class="form-input" value="20" id="annualleave">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Sick leave</label>
+                            <input type="text" class="form-input" value="5" id="sickleave">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Super %</label>
+                            <input type="text" class="form-input" value="11.5" id="superannuation">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label"><strong>Net Working Days</strong></label>
+                        <input type="text" class="form-input calculated-value" value="225" id="daysworked" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>How This Calculator Works</h3>
+            <p>Most Australians quote their salary excluding tax and superannuation. Recruiters often quote "package" salaries that include super because they sound higher. Contract rates typically include super in the daily rate.</p>
+            <p>This calculator helps you compare these different formats by converting them to equivalent "standard" salary amounts. Contractors generally earn more because they don't receive paid leave, public holidays, or sick leave.</p>
+        </div>
+    </div>
+
+    <script>
+        function formatCurrency(value) {
+            if (!value || isNaN(value)) return '';
+            return new Intl.NumberFormat('en-AU', {
+                style: 'currency',
+                currency: 'AUD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        function unformatCurrency(input) {
+            if (!input) return 0;
+            return parseFloat(input.toString().replace(/[$,\s]/g, '')) || 0;
+        }
+
+        function calculate(changedField) {
+            const superRate = 1.0 + parseFloat(document.getElementById('superannuation').value) / 100;
+            const daysWorked = parseFloat(document.getElementById('daysworked').value);
+            
+            // Get unformatted values
+            const annualEx = unformatCurrency(document.getElementById('annualex').value);
+            const annualInc = unformatCurrency(document.getElementById('annualinc').value);
+            const dailyInc = unformatCurrency(document.getElementById('dailyinc').value);
+
+            let newAnnualEx, newAnnualInc, newDailyInc;
+
+            switch(changedField) {
+                case 'annualex':
+                    newAnnualInc = annualEx * superRate;
+                    newDailyInc = newAnnualInc / daysWorked;
+                    document.getElementById('annualinc').value = formatCurrency(newAnnualInc);
+                    document.getElementById('dailyinc').value = formatCurrency(newDailyInc);
+                    break;
+
+                case 'annualinc':
+                    newAnnualEx = annualInc / superRate;
+                    newDailyInc = annualInc / daysWorked;
+                    document.getElementById('annualex').value = formatCurrency(newAnnualEx);
+                    document.getElementById('dailyinc').value = formatCurrency(newDailyInc);
+                    break;
+
+                case 'dailyinc':
+                    newAnnualInc = dailyInc * daysWorked;
+                    newAnnualEx = newAnnualInc / superRate;
+                    document.getElementById('annualinc').value = formatCurrency(newAnnualInc);
+                    document.getElementById('annualex').value = formatCurrency(newAnnualEx);
+                    break;
+
+                default:
+                    // Assumptions changed - recalculate working days
+                    updateWorkingDays();
+                    // If we have existing values, recalculate them
+                    if (annualEx > 0) {
+                        calculate('annualex');
+                    } else if (annualInc > 0) {
+                        calculate('annualinc');
+                    } else if (dailyInc > 0) {
+                        calculate('dailyinc');
+                    }
+                    break;
+            }
+        }
+
+        function updateWorkingDays() {
+            const daysPerWeek = parseFloat(document.getElementById('daysperweek').value);
+            const pubHols = parseFloat(document.getElementById('pubhols').value);
+            const annualLeave = parseFloat(document.getElementById('annualleave').value);
+            const sickLeave = parseFloat(document.getElementById('sickleave').value);
+            
+            const weekdays = daysPerWeek * 52;
+            document.getElementById('weekdays').value = weekdays;
+            
+            // Calculate pro-rata annual leave
+            let proRataLeave = Math.round((daysPerWeek / 5) * 20);
+            if (daysPerWeek > 5) {
+                alert("Working more than 5 days per week? That's intense!");
+                proRataLeave = 20;
+            }
+            document.getElementById('annualleave').value = proRataLeave;
+            
+            const netDays = weekdays - pubHols - proRataLeave - sickLeave;
+            document.getElementById('daysworked').value = netDays;
+        }
+
+        function handleInput(event) {
+            const field = event.target;
+            
+            // Remove highlighting from all inputs
+            document.querySelectorAll('.form-input').forEach(input => {
+                input.classList.remove('highlighted');
+            });
+            
+            // Highlight current field
+            field.classList.add('highlighted');
+            
+            calculate(field.id);
+            
+            // Remove highlight after a delay
+            setTimeout(() => {
+                field.classList.remove('highlighted');
+            }, 1000);
+        }
+
+        // Add event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input');
+            
+            inputs.forEach(input => {
+                // Handle both change and Enter key
+                input.addEventListener('change', handleInput);
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        handleInput(e);
+                    }
+                });
+                
+                // Format currency fields on blur
+                if (['annualex', 'annualinc', 'dailyinc'].includes(input.id)) {
+                    input.addEventListener('blur', function() {
+                        if (this.value) {
+                            const value = unformatCurrency(this.value);
+                            if (value > 0) {
+                                this.value = formatCurrency(value);
+                            }
+                        }
+                    });
+                }
+            });
+            
+            // Initialize working days calculation
+            updateWorkingDays();
+        });
+    </script>
+</body>
 </html>
