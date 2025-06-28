@@ -364,13 +364,14 @@
                 default:
                     // Assumptions changed - recalculate working days
                     updateWorkingDays();
-                    // If we have existing values, recalculate them
-                    if (annualEx > 0) {
-                        calculate('annualex');
-                    } else if (annualInc > 0) {
-                        calculate('annualinc');
-                    } else if (dailyInc > 0) {
-                        calculate('dailyinc');
+                    // If we have existing values, recalculate them based on the existing annual ex value
+                    const currentAnnualEx = unformatCurrency(document.getElementById('annualex').value);
+                    if (currentAnnualEx > 0) {
+                        const newDaysWorked = parseFloat(document.getElementById('daysworked').value);
+                        const newAnnualInc = currentAnnualEx * superRate;
+                        const newDailyInc = newAnnualInc / newDaysWorked;
+                        document.getElementById('annualinc').value = formatCurrency(newAnnualInc);
+                        document.getElementById('dailyinc').value = formatCurrency(newDailyInc);
                     }
                     break;
             }
@@ -385,15 +386,17 @@
             const weekdays = daysPerWeek * 52;
             document.getElementById('weekdays').value = weekdays;
             
-            // Calculate pro-rata annual leave
-            let proRataLeave = Math.round((daysPerWeek / 5) * 20);
-            if (daysPerWeek > 5) {
-                alert("Working more than 5 days per week? That's intense!");
-                proRataLeave = 20;
+            // Only auto-calculate annual leave when days per week changes, not when annual leave is manually edited
+            if (event && event.target.id === 'daysperweek') {
+                let proRataLeave = Math.round((daysPerWeek / 5) * 20);
+                if (daysPerWeek > 5) {
+                    alert("Working more than 5 days per week? That's intense!");
+                    proRataLeave = 20;
+                }
+                document.getElementById('annualleave').value = proRataLeave;
             }
-            document.getElementById('annualleave').value = proRataLeave;
             
-            const netDays = weekdays - pubHols - proRataLeave - sickLeave;
+            const netDays = weekdays - pubHols - annualLeave - sickLeave;
             document.getElementById('daysworked').value = netDays;
         }
 
@@ -407,6 +410,9 @@
             
             // Highlight current field
             field.classList.add('highlighted');
+            
+            // Store the event globally so updateWorkingDays can access it
+            window.currentEvent = event;
             
             calculate(field.id);
             
